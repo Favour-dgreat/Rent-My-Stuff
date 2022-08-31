@@ -1,0 +1,56 @@
+{
+  "name": "rentmystuff",
+  "homepage": "https://Favour-dgreat.github.io/Rent-My-Stuff",
+  "version": "0.1.0",
+  "private": false,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "bootstrap": "^5.2.0",
+    "bootstrap-icons": "^1.8.1",
+    "gh-pages": "^4.0.0",
+    "near-api-js": "^0.44.2",
+    "react": "^18.0.0",
+    "react-alice-carousel": "^2.6.4",
+    "react-bootstrap": "^2.5.0",
+    "react-dom": "^18.0.0",
+    "react-scripts": "4.0.3",
+    "react-toastify": "^8.2.0",
+    "uuid": "^8.3.2",
+    "web-vitals": "^2.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "near-sdk-as": "^3.2.3"
+  },
+  "main": "index.js",
+  "repository": "https://github.com/Favour-dgreat/Rent-My-Stuff",
+  "author": "Favour-dgreat <53022031+Favour-dgreat@users.noreply.github.com>",
+  "license": "MIT"
+}
