@@ -1,11 +1,20 @@
 import { Item, listedItems } from "./model";
 import { ContractPromiseBatch, context, u128 } from "near-sdk-as";
 
+
+/**
+ * @dev allow users to add an item to the platform
+ * @param item object of values for creating an instance of Item
+ */
 export function setItem(item: Item): void {
 	let storedItem = listedItems.get(item.id);
 	if (storedItem !== null) {
 		throw new Error(`item with ${item.id} already exists`);
 	}
+  assert(item.location.length > 0, "Empty location");
+  assert(item.name.length > 0, "Empty name");
+  assert(item.image.length > 0, "Empty image url");
+  assert(item.description.length > 0, "Empty location");
 	listedItems.set(item.id, Item.fromPayload(item));
 }
 
@@ -17,6 +26,11 @@ export function getItems(): Item[] {
 	return listedItems.values();
 }
 
+/**
+ * @dev allow items' owners to put an item on sale
+ * @param itemId of item
+ * @param price new price of item
+ */
 export function putOnSale(itemId: string, price: u128): void {
 	const item = getItem(itemId);
 	if (item == null) {
@@ -34,6 +48,11 @@ export function putOnSale(itemId: string, price: u128): void {
 	listedItems.set(item.id, item);
 }
 
+/**
+ * @dev allow items' owners to put an item on rent
+ * @param itemId of item
+ * @param price new price of item
+ */
 export function putOnRent(itemId: string, price: u128): void {
 	const item = getItem(itemId);
 	if (item == null) {
@@ -51,6 +70,11 @@ export function putOnRent(itemId: string, price: u128): void {
 	listedItems.set(item.id, item);
 }
 
+
+/**
+ * @dev allow users to buy an item on sale
+ * @param itemId of item
+ */
 export function buyItem(itemId: string): void {
 	const item = getItem(itemId);
 	if (item == null) {
@@ -70,6 +94,11 @@ export function buyItem(itemId: string): void {
 	listedItems.set(item.id, item);
 }
 
+/**
+ * @dev allow users to rent an item available for rent
+ * @param itemId of item
+ * @param duration is the duration of rent
+ */
 export function rentItem(itemId: string, duration: u64): void {
 	const item = getItem(itemId);
 	if (item == null) {
@@ -90,12 +119,17 @@ export function rentItem(itemId: string, duration: u64): void {
 	listedItems.set(item.id, item);
 }
 
+/**
+ * @dev allow items' owners or owners to end rent of an item
+ * @param itemId of item
+ */
 export function endRentItem(itemId: string): void {
 	const item = getItem(itemId);
 	if (item == null) {
 		throw new Error("item not found");
 	}
 	assert(item.isRented == true, "Item isn't being rented");
+  assert(item.rentTime <= context.blockTimestamp, "Renting period isn't over yet");
 	assert(
 		item.owner.toString() == context.sender.toString() ||
 			item.renter.toString() == context.sender.toString(),

@@ -24,27 +24,28 @@ export class Item {
 		item.location = payload.location;
 		item.date = payload.date;
 		item.image = payload.image;
-		item.price = payload.price;
-    item.rentPrice = payload.rentPrice;
+		item.price = u128.Zero;
+    item.rentPrice = u128.Zero;
     item.rentTime = u64.MIN_VALUE;
 		item.owner = context.sender;
 		item.renter = "";
-		item.isRent = payload.isRent;
-		item.isSale = payload.isSale;
+		item.isRent = false;
+		item.isSale = false;
 		item.isRented = false;
 		return item;
 	}
 
+  // puts an item on sale
 	public putOnSale(): void {
 		this.isSale = true;
     this.isRent = false;
   }
-
+  // puts an item on rent
   public putOnRent(): void {
     this.isRent = true;
     this.isSale = false;
   }
-
+  // changes either price or rentPrice depending on @param priceOf which is a hardcoded string
   public changePrices(price: u128, priceOf: string): void {
     if(priceOf == "sale"){
       this.price = price;
@@ -54,17 +55,19 @@ export class Item {
       return;
     }
   }
-
+  // rents an item to caller
   public rent(duration :u64): void {
+    this.isRent = false;
+    this.isRented = true;
     this.renter = context.sender;
     this.rentTime = duration + context.blockTimestamp;
   }
-
+  // changes ownership of item to caller
   public buy() : void {
     this.isSale = false;
     this.owner = context.sender;
   }
-
+  // ends rent on an item
   public endRent(): void {
     this.renter = "";
     this.rentTime = u64.MIN_VALUE;
